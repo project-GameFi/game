@@ -1,12 +1,32 @@
 import "../../mongodb";
 import mongoose from "mongoose";
+const Schema = mongoose.Schema;
+import UserTask from "./userTask";
 
-const COLLECTION = "users";
+const COLLECTION = "user";
 
-const Schema = new mongoose.Schema(
+// User Schema
+const UserSchema = new Schema(
     {
+        telegramId: { type: String, unique: true },
         name: String,
-        email: String,
+        isPremium: { type: Boolean, default: false },
+        points: { type: Number, default: 0 },
+        pointsBalance: { type: Number, default: 0 },
+        multitapLevelIndex: { type: Number, default: 0 },
+        energy: { type: Number, default: 100 },
+        energyRefillsLeft: { type: Number, default: 6 },
+        energyLimitLevelIndex: { type: Number, default: 0 },
+        mineLevelIndex: { type: Number, default: 0 },
+        lastPointsUpdateTimestamp: { type: Date, default: Date.now },
+        lastEnergyUpdateTimestamp: { type: Date, default: Date.now },
+        lastEnergyRefillsTimestamp: { type: Date, default: Date.now },
+        tonWalletAddress: String,
+        referralPointsEarned: { type: Number, default: 0 },
+        offlinePointsEarned: { type: Number, default: 0 },
+        referrals: [{ type: Schema.Types.ObjectId, ref: "User" }],
+        referredBy: { type: Schema.Types.ObjectId, ref: "User" },
+        completedTasks: [{ type: Schema.Types.ObjectId, ref: UserTask }],
     },
     {
         collection: COLLECTION,
@@ -21,9 +41,6 @@ const Schema = new mongoose.Schema(
     },
 );
 
-// Schema.index({ email: 1 });
-// Schema.index({ "metadata.rewardWalletAddress": 1 });
-
 export default mongoose.models[COLLECTION] ||
-    mongoose.model(COLLECTION, Schema);
+    mongoose.model(COLLECTION, UserSchema);
 
