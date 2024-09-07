@@ -4,8 +4,7 @@ import "../../../mongodb";
 export default async function handler(req, res) {
     try {
         const person = new user({
-            name: "gamer",
-            email: "gamer@gmail.com",
+            name: "gamer2",
         });
         await person.save();
 
